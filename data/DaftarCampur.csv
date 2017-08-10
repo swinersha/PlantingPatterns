@@ -1,0 +1,19 @@
+Sistem,NamaCampur,Tipe,Jenis
+Dasar,AlamiDasar,Karet,Karet
+Dasar,AlamiDasar,Cahaya,Durian hutan
+Dasar,AlamiDasar,Cahaya,Gaharu
+Dasar,AlamiDasar,Cahaya,Jengkol
+Dasar,Buahbuah.1,Karet,Karet
+Dasar,Buahbuah.1,Cahaya,Durian
+Dasar,Buahbuah.1,Cahaya,Duku
+Dasar,Buahbuah.1,Cahaya,Nangka
+Kompleks,AlamiKompleks,Karet,Karet
+Kompleks,AlamiKompleks,Cahaya,Pulai
+Kompleks,AlamiKompleks,Cahaya,Jabon
+Kompleks,AlamiKompleks,Naungan,Kemiri
+Kompleks,AlamiKompleks,Naungan,Meranti bunga
+Regen,TungguDulu,Karet,Karet
+Regen,TungguDulu,Naungan,Durian hutan
+Regen,TungguDulu,Naungan,Cempedak
+Regen,TungguDulu,Naungan,Kemiri
+Regen,TungguDulu,Naungan,Meranti bunga
