@@ -103,11 +103,16 @@ regen_xy$sistem<-"regen"
 systems_xy<-rbind(mono_xy, simple_xy, complex_xy, regen_xy)
 systems_xy$sistem<-fct_relevel(systems_xy$sistem, "mono", "dasar", "regen", "kompleks")
 
-
+pdf(file = "Figures/PatternAgroForest.pdf", 
+    width = 7,
+    height = 5, 
+    pointsize = 20)
 ggplot(systems_xy, aes(x, y, color = jenis)) +
   geom_point() +
   xlim(0, 50) + ylim(0, 50) +
-  facet_grid(sistem~.)
+  facet_grid(sistem~.) +
+  coord_fixed()
+dev.off()
 
 write.csv(systems_xy, "data/Pola_tanam.csv")
 
