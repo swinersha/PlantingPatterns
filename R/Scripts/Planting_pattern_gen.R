@@ -32,8 +32,8 @@ rubber_xy<-species_pos_gen(length=50,
                 yoffset=c(0, RUBBER_YDIST/2),
                 xcentralise=TRUE, 
                 ycentralise=FALSE)
-rubber_xy$tipe<-"karet"
-rubber_xy$jenis<-"karet"
+rubber_xy<-select_species(rubber_xy, mix, "DemPlotDasar", species.type = "Karet", 
+                             alternate.inrow = FALSE)
 
 mono_xy<-rubber_xy
 mono_xy$sistem<-"mono"
@@ -47,9 +47,8 @@ simple_ld_xy<-species_pos_gen(length=50,
                            yoffset=0,
                            xcentralise=TRUE, 
                            ycentralise=FALSE)
-simple_ld_xy$tipe<-"cahaya"
-simple_ld_xy$jenis<-select_species(mix, "AlamiDasar", species.type = "Cahaya", 
-                                     nrow(simple_ld_xy))
+simple_ld_xy<-select_species(simple_ld_xy, mix, "DemPlotDasar", species.type = "Cahaya", 
+                                     alternate.inrow = FALSE)
 
 simple_xy<-rbind(rubber_xy, simple_ld_xy)
 simple_xy$sistem<-"dasar"
@@ -63,9 +62,8 @@ complex_ld_xy<-species_pos_gen(length=50,
                               yoffset=c(0, COMPLEX_LD_YDIST/2),
                               xcentralise=TRUE, 
                               ycentralise=FALSE)
-complex_ld_xy$tipe<-"light"
-complex_ld_xy$jenis <-
-  select_species(mix, "AlamiKompleks", nrow(complex_ld_xy), species.type = "Cahaya")
+complex_ld_xy<-select_species(complex_ld_xy, mix, "DemPlotKompleks", species.type = "Cahaya", 
+                             alternate.inrow = FALSE)
 
 # Complex shade tolerating
 complex_sh_xy<-species_pos_gen(length=50,
@@ -75,9 +73,9 @@ complex_sh_xy<-species_pos_gen(length=50,
                                yoffset=0,
                                xcentralise=TRUE, 
                                ycentralise=FALSE)
-complex_sh_xy$tipe<-"shade"
-complex_sh_xy$jenis <-
-  select_species(mix, "AlamiKompleks", nrow(complex_sh_xy), species.type = "Naungan")
+complex_sh_xy<-select_species(complex_sh_xy, mix, "DemPlotKompleks", species.type = "Naungan", 
+                             alternate.inrow = TRUE)
+
 
 complex_xy<-rbind(rubber_xy, complex_ld_xy, complex_sh_xy)
 complex_xy$sistem<-"kompleks"
@@ -91,9 +89,8 @@ regen_sh_xy<-species_pos_gen(length=50,
                                yoffset=0,
                                xcentralise=TRUE, 
                                ycentralise=TRUE)
-regen_sh_xy$tipe<-"shade"
-regen_sh_xy$jenis <-
-  select_species(mix, "TungguDulu", nrow(regen_sh_xy), species.type = "Naungan")
+regen_sh_xy<-select_species(regen_sh_xy, mix, "DemPlotRegen", species.type = "Naungan", 
+                             alternate.inrow = TRUE)
 
 regen_xy<-rbind(rubber_xy, regen_sh_xy)
 regen_xy$sistem<-"regen"
@@ -102,17 +99,26 @@ regen_xy$sistem<-"regen"
 
 systems_xy<-rbind(mono_xy, simple_xy, complex_xy, regen_xy)
 systems_xy$sistem<-fct_relevel(systems_xy$sistem, "mono", "dasar", "regen", "kompleks")
+systems_xy$species<-fct_relevel(systems_xy$species, "Karet")
 
 pdf(file = "Figures/PatternAgroForest.pdf", 
     width = 7,
     height = 5, 
     pointsize = 20)
-ggplot(systems_xy, aes(x, y, color = jenis)) +
+ggplot(systems_xy, aes(x, y, color = species)) +
   geom_point() +
   xlim(0, 50) + ylim(0, 50) +
   facet_grid(sistem~.) +
   coord_fixed()
 dev.off()
 
-write.csv(systems_xy, "data/Pola_tanam.csv")
+mono_xy<-dplyr::rename(mono_xy, posisi = row, jalur = col)
+simple_xy<-dplyr::rename(simple_xy, posisi = row, jalur = col)
+complex_xy<-dplyr::rename(complex_xy, posisi = row, jalur = col)
+regen_xy<-dplyr::rename(regen_xy, posisi = row, jalur = col)
 
+
+write.csv(mono_xy, "data/Pola_tanam_mono.csv")
+write.csv(simple_xy, "data/Pola_tanam_simple.csv")
+write.csv(complex_xy, "data/Pola_tanam_kompleks.csv")
+write.csv(regen_xy, "data/Pola_tanam_regen.csv")

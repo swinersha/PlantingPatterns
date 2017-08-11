@@ -90,10 +90,12 @@ species_pos_gen<-function(length, xdist, ydist, xoffset=0, yoffset=0, xcentralis
 #' A funciton which given the mix name returns a repeating list
 #' of the species for the planting positions
 #' 
+#' @param xy A dataframe describing the planting positions
 #' @param mix A dataframe describing the mixes
 #' @param mix_name The name of the mix
 #' @param type The type of species to be selected
-#' @param length_out The output length, which should be the same as 
+#' @param alternate.inrow Logical stating whether or not the species should alternate
+#' within plating rows
 #' the number of planting positions
 #' @return A factor vetor of species the same length as length_out
 #' @export
@@ -102,12 +104,21 @@ species_pos_gen<-function(length, xdist, ydist, xoffset=0, yoffset=0, xcentralis
 #' 
 #' Created 17-08-10
 
-select_species<-function(mix, mix.name, length.out, species.type=NULL){
+xy = simple_ld_xy
+mix.name = "DemPlotDasar"
+species.type = "Cahaya"
+alternate.inrow = TRUE
+
+select_species<-function(xy, mix, mix.name, species.type=NULL, alternate.inrow=TRUE){
   if(!is.null(species.type))
     mix<-filter(mix, type == species.type)
   spp<-mix %>% filter(mix_name == mix.name) %>%
     select(species) %>% 
-    unlist() %>%
-    rep_len(length.out=length.out)
-  return(spp)
+    unlist()
+  xy$type<-species.type
+  if(alternate.inrow)
+    xy$species<-rep_len(spp, length.out=nrow(xy)) # alternates within planting rows
+  else
+    xy$species<-spp[(xy$col - 1) %% length(spp) +1] # alternates between planting rows
+  return(xy)
 }
